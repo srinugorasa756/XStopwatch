@@ -31,6 +31,10 @@ function Stopwatch() {
     setIsRunning(false);
     clearInterval(intervalRef.current);
   };
+
+  useEffect(() => {
+    setTime((prev) => prev); // triggers initial render with 0
+  }, []);
   return (
     <div>
       <h1>Stopwatch</h1>
@@ -43,4 +47,5 @@ function Stopwatch() {
   );
 }
 export default Stopwatch;
+
 
