@@ -1,52 +1,67 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-function Stopwatch() {
-  const [time, setTime] = useState(0);
+const Stopwatch = () => {
+  const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef(null);
 
- 
-
-    const seconds = time % 60;
-    const minutes = Math.floor(time / 60);
-    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-    const formattedTime = `${minutes}:${formattedSeconds}`;
-
-  const starthandler = () => {
-    if (!isRunning) {
-      intervalRef.current = setInterval(() => {
-        setTime((prev) => prev+1);
-      }, 1000);
+  // Start / Stop toggle
+  const handleStartStop = () => {
+    if (isRunning) {
+      clearInterval(intervalRef.current);
+      setIsRunning(false);
+    } else {
       setIsRunning(true);
+      intervalRef.current = setInterval(() => {
+        setSecondsElapsed((prev) => prev + 1);
+      }, 1000);
     }
   };
 
-  const stopHandler = () => {
-    setIsRunning(false);
+  // Reset
+  const handleReset = () => {
     clearInterval(intervalRef.current);
+    setIsRunning(false);
+    setSecondsElapsed(0);
   };
 
-  const resetHandler = () => {
-    setTime(0);
-    setIsRunning(false);
-    clearInterval(intervalRef.current);
-  };
 
   useEffect(() => {
-    setTime((prev) => prev); // triggers initial render with 0
+    return () => clearInterval(intervalRef.current);
   }, []);
+
+  
+  const minutes = Math.floor(secondsElapsed / 60);
+  const seconds = secondsElapsed % 60;
+  const formattedTime = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
   return (
-    <div>
+    <div style={styles.container}>
       <h1>Stopwatch</h1>
-      <h1>Time:{formattedTime}</h1>
-      <br />
-      {!isRunning && <button onClick={starthandler}>Start</button>}
-      {isRunning && <button onClick={stopHandler}>Stop</button>}
-      <button onClick={resetHandler}>Reset</button>
+      <p>Time: {formattedTime}</p>
+      <div style={styles.buttonContainer}>
+        <button onClick={handleStartStop}>{isRunning ? "Stop" : "Start"}</button>
+        <button onClick={handleReset}>Reset</button>
+      </div>
     </div>
   );
-}
+};
+
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100vh",
+    fontFamily: "Arial, sans-serif",
+    gap: "20px",
+    backgroundColor: "#f2f2f2",
+  },
+  buttonContainer: {
+    display: "flex",
+    gap: "10px",
+  },
+};
+
 export default Stopwatch;
-
-
-
