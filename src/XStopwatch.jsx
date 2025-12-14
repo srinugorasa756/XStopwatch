@@ -1,19 +1,23 @@
 import { useRef, useState } from "react";
 
 function Stopwatch() {
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState(undefined);
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef(null);
 
-  const seconds = time % 60;
-  const minutes = Math.floor(time / 60);
-  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-  const formattedTime = `${minutes}:${formattedSeconds}`;
+  let formattedTime = "0:00";
+
+  if (typeof time === "number") {
+    const seconds = time % 60;
+    const minutes = Math.floor(time / 60);
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+    formattedTime = `${minutes}:${formattedSeconds}`;
+  }
 
   const starthandler = () => {
     if (!isRunning) {
       intervalRef.current = setInterval(() => {
-        setTime((prev) => prev + 1);
+        setTime((prev) => (prev === undefined ? 1 : prev + 1));
       }, 1000);
       setIsRunning(true);
     }
@@ -25,7 +29,7 @@ function Stopwatch() {
   };
 
   const resetHandler = () => {
-    setTime(0);
+    setTime(undefined);
     setIsRunning(false);
     clearInterval(intervalRef.current);
   };
@@ -41,4 +45,3 @@ function Stopwatch() {
   );
 }
 export default Stopwatch;
-
