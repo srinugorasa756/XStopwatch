@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
 function Stopwatch() {
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef(null);
 
@@ -41,3 +41,4 @@ function Stopwatch() {
   );
 }
 export default Stopwatch;
+
