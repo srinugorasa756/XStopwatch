@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 function Stopwatch() {
   const [time, setTime] = useState(0);
@@ -47,5 +47,6 @@ function Stopwatch() {
   );
 }
 export default Stopwatch;
+
 
 
